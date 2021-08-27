@@ -1,13 +1,31 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+//import { useHistory } from 'react-router-dom';
 
 const Login = () => {
-  const history = useHistory();
+  // const history = useHistory();
   const [email, setEmail] = useState('');
   const [OTP, setOTP] = useState();
 
   console.log(email);
   console.log(OTP);
+
+  const login = async () => {
+    console.log('Logging in ....');
+    const response = await fetch(
+      'http://08f2-2409-4072-6406-4971-b499-4a80-1c16-b40d.ngrok.io/otp/',
+      {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: email }),
+      }
+    );
+
+    const resData = await response.json();
+    console.log(resData);
+  };
 
   const maxLengthCheck = (object) => {
     if (object.target.value.length > object.target.maxLength) {
@@ -21,7 +39,7 @@ const Login = () => {
   return (
     <div>
       <h1>Login</h1>
-      <form className='add-form' onSubmit={() => history.push('/snippets')}>
+      <form className='add-form' onSubmit={login}>
         <div className='form-control'>
           <label>Email id</label>
           <input
