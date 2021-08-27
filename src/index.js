@@ -2,11 +2,21 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import ReduxThunk from 'redux-thunk';
 import reportWebVitals from './reportWebVitals';
+import notesReducer from './store/reducers/notesReducer';
+
+const rootReducer = combineReducers({ NotesReducer: notesReducer });
+
+const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

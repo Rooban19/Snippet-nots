@@ -1,19 +1,29 @@
-import { FaTimes } from 'react-icons/fa';
+import { AiFillDelete } from 'react-icons/ai';
+import { useHistory } from 'react-router-dom';
 
 const Task = ({ task, onDelete, onToggle }) => {
+  const history = useHistory();
+
   return (
     <div
       className={`task ${task.reminder && 'reminder'}`}
-      onDoubleClick={() => onToggle(task.id)}>
+      onClick={() =>
+        history.push('/details', { title: task.text, desc: task.user })
+      }>
       <h3>
         {task.text}{' '}
-        <FaTimes
+        <AiFillDelete
           style={{ color: 'red', cursor: 'pointer' }}
           onClick={() => onDelete(task.id)}
         />
       </h3>
-      <p>{task.time}</p>
-      <p>Created by : {task.user}</p>
+      {/* <p>{task.time}</p> */}
+      <p>
+        {' '}
+        {task.user.length > 50
+          ? task.user.slice(0, 80) + '. . . . .'
+          : task.user}
+      </p>
     </div>
   );
 };

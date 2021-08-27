@@ -24,34 +24,25 @@ const AddTask = ({ onAdd }) => {
   return (
     <form className='add-form' onSubmit={onSubmit}>
       <div className='form-control'>
-        <label>Add Snippet</label>
+        <label>Title</label>
         <input
           type='text'
-          placeholder='Add Text'
+          placeholder='Enter the title'
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
       </div>
       <div className='form-control'>
-        <label>Created By</label>
+        <label>Description</label>
         <input
           type='text'
-          placeholder='Created By'
+          placeholder='Enter the description'
           value={day}
           onChange={(e) => setDay(e.target.value)}
         />
       </div>
-      {/* <div className='form-control form-control-check'>
-        <label>Set Reminder</label>
-        <input
-          type='checkbox'
-          checked={reminder}
-          value={reminder}
-          onChange={(e) => setReminder(e.currentTarget.checked)}
-        />
-      </div> */}
 
-      <input type='submit' value='Save Snippet' className='btn btn-block' />
+      <input type='submit' value='Save' className='btn btn-block' />
     </form>
   );
 };
