@@ -4,12 +4,11 @@ import Footer from './Footer';
 import Tasks from './Tasks';
 import AddTask from './AddTask';
 import PropTypes from 'prop-types';
+import api from '../api';
 
 const Snippets = (props) => {
   const [showAddTask, setShowAddTask] = useState(false);
-  const [tasks, setTasks] = useState([
-    { id: 1, text: 'hello there', time: '12:27 AM 27/8/2021', user: 'Rooban' },
-  ]);
+  const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
     const getTasks = async () => {
@@ -19,13 +18,23 @@ const Snippets = (props) => {
 
     getTasks();
   }, []);
-
+  console.log(tasks);
   // Fetch Tasks
   const fetchTasks = async () => {
-    const res = await fetch('http://localhost:5000/tasks');
+    const res = await fetch(`${api}getsnip/`, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        token:
+          'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InJvb2JhbmRjOEBnbWFpbC5jb20ifQ.OGrEymIqN3f9EAcdVJJfi_KSZQfDDnGGY7ywSXVLutU',
+      }),
+    });
     const data = await res.json();
 
-    return data;
+    return data.result;
   };
 
   // Fetch Task
@@ -40,46 +49,45 @@ const Snippets = (props) => {
   const addTask = async (task) => {
     console.log('TASK ', task);
 
-    // const res = await fetch('http://localhost:5000/tasks', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-type': 'application/json',
-    //   },
-    //   body: JSON.stringify(task),
-    // });
+    const response = await fetch(`${api}${'createsnip/'}`, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        title: task.text,
+        text: task.day,
+        token:
+          'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InJvb2JhbmRjOEBnbWFpbC5jb20ifQ.OGrEymIqN3f9EAcdVJJfi_KSZQfDDnGGY7ywSXVLutU',
+      }),
+    });
 
-    // const data = await res.json();
-
-    // setTasks([...tasks, data]);
-    var today = new Date();
-    var time = today.getHours() + ':' + today.getMinutes();
-    var date =
-      +today.getDate() +
-      '/' +
-      (today.getMonth() + 1) +
-      '/' +
-      today.getFullYear();
-    const timestamp = time + ' AM ' + date;
-    const id = Math.floor(Math.random() * 10000) + 1;
-    const newTask = {
-      id: id,
-      text: task.text,
-      time: timestamp,
-      user: task.day,
-    };
-    setTasks([...tasks, newTask]);
-    console.log(tasks);
+    const tasksFromServer = await fetchTasks();
+    setTasks(tasksFromServer);
   };
 
   // Delete Task
   const deleteTask = async (id) => {
-    // const res = await fetch(`http://localhost:5000/tasks/${id}`, {
-    //   method: 'DELETE',
-    // });
+    console.log('DELETE ID ', id);
+    const res = await fetch(`${api}${'deletesnip'}`, {
+      method: 'DELETE',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        snipid: id,
+        token:
+          'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InJvb2JhbmRjOEBnbWFpbC5jb20ifQ.OGrEymIqN3f9EAcdVJJfi_KSZQfDDnGGY7ywSXVLutU',
+      }),
+    });
     // //We should control the response status to decide if we will change the state or not.
     // res.status === 200
     //  ?setTasks( tasks.filter( ( task ) => task.id !== id ) )
-    setTasks(tasks.filter((task) => task.id !== id));
+    // setTasks(tasks.filter((task) => task.id !== id));
+    const tasksFromServer = await fetchTasks();
+    setTasks(tasksFromServer);
     //: alert('Error Deleting This Task');
   };
 

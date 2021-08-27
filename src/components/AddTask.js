@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import moment from 'moment';
+import api from '../api';
 
 const AddTask = ({ onAdd }) => {
   const [text, setText] = useState('');
   const [day, setDay] = useState('');
   const [reminder, setReminder] = useState(false);
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
     if (!text) {

@@ -1,30 +1,35 @@
 import React, { useState } from 'react';
-//import { useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import api from '../api';
 
 const Login = () => {
-  // const history = useHistory();
+  const history = useHistory();
   const [email, setEmail] = useState('');
   const [OTP, setOTP] = useState();
-
+  const [sentOTP, setSentOTP] = useState(false);
   console.log(email);
   console.log(OTP);
 
   const login = async () => {
     console.log('Logging in ....');
-    const response = await fetch(
-      'http://08f2-2409-4072-6406-4971-b499-4a80-1c16-b40d.ngrok.io/otp/',
-      {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email: email }),
-      }
-    );
+
+    const response = await fetch(`${api}${sentOTP ? 'login/' : 'otp/'}`, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: email, otp: OTP }),
+    });
 
     const resData = await response.json();
     console.log(resData);
+    if (response.status === 200) {
+      setSentOTP(true);
+      if (sentOTP) {
+        history.push('/snippets');
+      }
+    }
   };
 
   const maxLengthCheck = (object) => {
@@ -39,7 +44,12 @@ const Login = () => {
   return (
     <div>
       <h1>Login</h1>
-      <form className='add-form' onSubmit={login}>
+      <form
+        className='add-form'
+        onSubmit={(e) => {
+          e.preventDefault();
+          login();
+        }}>
         <div className='form-control'>
           <label>Email id</label>
           <input
@@ -49,19 +59,25 @@ const Login = () => {
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-        <div className='form-control'>
-          <label>OTP</label>
-          <input
-            type='number'
-            placeholder='Enter the OTP'
-            value={OTP}
-            onInput={maxLengthCheck}
-            maxLength='5'
-            onChange={(e) => setOTP(e.target.value)}
-          />
-        </div>
+        {sentOTP && (
+          <div className='form-control'>
+            <label>OTP</label>
+            <input
+              type='number'
+              placeholder='Enter the OTP'
+              value={OTP}
+              onInput={maxLengthCheck}
+              maxLength='4'
+              onChange={(e) => setOTP(e.target.value)}
+            />
+          </div>
+        )}
 
-        <input type='submit' value='Login' className='btn btn-block' />
+        <input
+          type='submit'
+          value={sentOTP ? 'Login' : 'Sent OTP'}
+          className='btn btn-block'
+        />
       </form>
     </div>
   );

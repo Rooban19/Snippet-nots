@@ -5,13 +5,9 @@ const Task = ({ task, onDelete, onToggle }) => {
   const history = useHistory();
 
   return (
-    <div
-      className={`task ${task.reminder && 'reminder'}`}
-      onClick={() =>
-        history.push('/details', { title: task.text, desc: task.user })
-      }>
+    <div className={`task ${task.reminder && 'reminder'}`}>
       <h3>
-        {task.text}{' '}
+        {task.title}{' '}
         <AiFillDelete
           style={{ color: 'red', cursor: 'pointer' }}
           onClick={() => onDelete(task.id)}
@@ -20,9 +16,9 @@ const Task = ({ task, onDelete, onToggle }) => {
       {/* <p>{task.time}</p> */}
       <p>
         {' '}
-        {task.user.length > 50
-          ? task.user.slice(0, 80) + '. . . . .'
-          : task.user}
+        {task.text.length > 50
+          ? task.text.slice(0, 80) + '. . . . .'
+          : task.text}
       </p>
     </div>
   );
