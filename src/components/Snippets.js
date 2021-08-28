@@ -7,15 +7,15 @@ import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import ModalUpdate from './ModalUpdate';
 import api from '../api';
-import Cookies from 'universal-cookie';
+import Cookies from 'js-cookie';
 
 const Snippets = (props) => {
   const [showAddTask, setShowAddTask] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [tasks, setTasks] = useState([]);
   const [modalData, setModalData] = useState({ title: '', text: '', tag: '' });
-  const cookies = new Cookies();
-  console.log(cookies.get('token'), 'Cookies');
+
+  const cookie = Cookies.get('token');
   Modal.setAppElement('#root');
   useEffect(() => {
     const getTasks = async () => {
@@ -31,7 +31,9 @@ const Snippets = (props) => {
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: cookie,
       },
+
       body: JSON.stringify({
         title: task.text,
         text: task.day,
@@ -48,6 +50,7 @@ const Snippets = (props) => {
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: cookie,
       },
       body: JSON.stringify({
         token:
@@ -88,6 +91,7 @@ const Snippets = (props) => {
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: cookie,
       },
       body: JSON.stringify({
         snipid: id,
@@ -105,6 +109,7 @@ const Snippets = (props) => {
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: cookie,
       },
       body: JSON.stringify({
         snipid: id,
@@ -128,6 +133,7 @@ const Snippets = (props) => {
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: cookie,
       },
       body: JSON.stringify({
         id: id,
