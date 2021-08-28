@@ -19,7 +19,25 @@ body {
   padding: 30px;
   border-radius: 5px;
 }
-
+.modalcontainer {
+  max-width: 500px;
+  margin: 30px auto;
+  overflow: auto;
+  min-height: 400px;
+  border: 1px solid steelblue;
+  padding: 30px;
+  border-radius: 5px;
+  background-color: #fff;
+}
+.modaloverlay {
+  position: fixed;
+  top: 0%;
+  left: 0%;
+  right: 0%;
+  bottom: 0%;
+  background-color: grey;
+  background-blend-mode: exclusion;
+}
 .header {
   display: flex;
   justify-content: space-between;
@@ -58,6 +76,7 @@ body {
   background: #f4f4f4;
   margin: 5px;
   padding: 10px 20px;
+  border-left: 5px solid green;
   cursor: pointer;
 }
 

@@ -7,7 +7,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [OTP, setOTP] = useState();
   const [sentOTP, setSentOTP] = useState(false);
-  console.log(email);
+  console.log(api);
   console.log(OTP);
 
   const login = async () => {

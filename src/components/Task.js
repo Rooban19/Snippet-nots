@@ -5,21 +5,16 @@ const Task = ({ task, onDelete, onToggle }) => {
   const history = useHistory();
 
   return (
-    <div className={`task ${task.reminder && 'reminder'}`}>
+    <div className='task'>
       <h3>
-        {task.title}{' '}
+        <div onClick={() => onToggle(task.id)}> {task.title} </div>
         <AiFillDelete
           style={{ color: 'red', cursor: 'pointer' }}
           onClick={() => onDelete(task.id)}
         />
       </h3>
+
       {/* <p>{task.time}</p> */}
-      <p>
-        {' '}
-        {task.text.length > 50
-          ? task.text.slice(0, 80) + '. . . . .'
-          : task.text}
-      </p>
     </div>
   );
 };
