@@ -4,7 +4,7 @@ import moment from 'moment';
 import api from '../api';
 import Cookies from 'js-cookie';
 
-const AddTask = ({ onAdd }) => {
+const AddTask = ({ onAdd, addTask }) => {
   const [text, setText] = useState('');
   const [day, setDay] = useState('');
   const [tag, setTag] = useState('');
@@ -12,16 +12,23 @@ const AddTask = ({ onAdd }) => {
   console.log('TAG SELECT ', tag);
   const onSubmit = async (e) => {
     e.preventDefault();
-
-    if (text != '' && day != '' && tag != '') {
-      onAdd({ text, day, tag });
-      console.log(text, day, tag);
-      setText('');
-      setDay('');
-      setTag('');
-      setOptions([]);
+    if (addTask) {
+      if (text != '' && day != '' && tag != '') {
+        onAdd({ text, day, tag });
+        console.log(text, day, tag);
+        setText('');
+        setDay('');
+        setTag('');
+        setOptions([]);
+      } else {
+        alert('Please fill the details and click save');
+      }
     } else {
-      alert('Please fill the details and click save');
+      if (tag !== '') {
+        onAdd({ tag });
+      } else {
+        alert('Please enter the tag to search');
+      }
     }
   };
 
@@ -68,24 +75,28 @@ const AddTask = ({ onAdd }) => {
 
   return (
     <form className='add-form' onSubmit={onSubmit}>
-      <div className='form-control'>
-        <label>Title</label>
-        <input
-          type='text'
-          placeholder='Enter the title'
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-        />
-      </div>
-      <div className='form-control'>
-        <label>Description</label>
-        <input
-          type='text'
-          placeholder='Enter the description'
-          value={day}
-          onChange={(e) => setDay(e.target.value)}
-        />
-      </div>
+      {addTask && (
+        <>
+          <div className='form-control'>
+            <label>Title</label>
+            <input
+              type='text'
+              placeholder='Enter the title'
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+            />
+          </div>
+          <div className='form-control'>
+            <label>Description</label>
+            <input
+              type='text'
+              placeholder='Enter the description'
+              value={day}
+              onChange={(e) => setDay(e.target.value)}
+            />
+          </div>
+        </>
+      )}
 
       <label>Tag</label>
       <CreatableSelect
@@ -96,7 +107,11 @@ const AddTask = ({ onAdd }) => {
         options={options}
       />
 
-      <input type='submit' value='Save' className='btn btn-block' />
+      <input
+        type='submit'
+        value={addTask ? 'Save' : 'Search tags'}
+        className='btn btn-block'
+      />
     </form>
   );
 };

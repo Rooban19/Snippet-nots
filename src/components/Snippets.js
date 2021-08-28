@@ -12,9 +12,10 @@ import Cookies from 'js-cookie';
 const Snippets = (props) => {
   const [showAddTask, setShowAddTask] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [showTags, setShowTags] = useState(false);
   const [tasks, setTasks] = useState([]);
   const [modalData, setModalData] = useState({ title: '', text: '', tag: '' });
-
+  const [tagResults, setTagResults] = useState([]);
   const cookie = Cookies.get('token');
   Modal.setAppElement('#root');
   useEffect(() => {
@@ -141,11 +142,34 @@ const Snippets = (props) => {
     setModalOpen(false);
   };
 
+  const onTagSearch = async (tag) => {
+    console.log('Searching the TAGGG');
+    const res = await fetch(`${api}gettaggedsnip/`, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: cookie,
+      },
+      body: JSON.stringify({
+        title: tag.tag,
+      }),
+    });
+
+    const data = await res.json();
+    if (data.code === 200) {
+      setTagResults(data.result);
+    }
+    console.log(data);
+  };
+
   return (
     <div>
       <Header
         onAdd={() => setShowAddTask(!showAddTask)}
         showAdd={showAddTask}
+        onTags={() => setShowTags(!showTags)}
+        showTags={showTags}
       />
       <Modal
         isOpen={modalOpen}
@@ -160,12 +184,27 @@ const Snippets = (props) => {
           tagg={modalData.tag.title}
         />
       </Modal>
-      {showAddTask && <AddTask onAdd={addTask} />}
-      {tasks.length > 0 ? (
-        <Tasks tasks={tasks} onDelete={deleteTask} onToggle={onTaskClicked} />
-      ) : (
-        'No Tasks To Show'
-      )}
+      {showAddTask && <AddTask onAdd={addTask} addTask={true} />}
+      {showTags && <AddTask onAdd={onTagSearch} addTask={false} />}
+      {tasks.length > 0
+        ? !showTags && (
+            <Tasks
+              tasks={tasks}
+              onDelete={deleteTask}
+              onToggle={onTaskClicked}
+            />
+          )
+        : 'No Tasks To Show'}
+      {showTags &&
+        (tagResults.length > 0 ? (
+          <Tasks
+            tasks={tagResults}
+            onDelete={deleteTask}
+            onToggle={onTaskClicked}
+          />
+        ) : (
+          'Nothing founded'
+        ))}
     </div>
   );
 };
