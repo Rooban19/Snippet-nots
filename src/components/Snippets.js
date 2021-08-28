@@ -38,8 +38,6 @@ const Snippets = (props) => {
         title: task.text,
         text: task.day,
         tag: task.tag,
-        token:
-          'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InJvb2JhbmRjOEBnbWFpbC5jb20ifQ.OGrEymIqN3f9EAcdVJJfi_KSZQfDDnGGY7ywSXVLutU',
       }),
     };
   }
@@ -52,10 +50,6 @@ const Snippets = (props) => {
         'Content-Type': 'application/json',
         Authorization: cookie,
       },
-      body: JSON.stringify({
-        token:
-          'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InJvb2JhbmRjOEBnbWFpbC5jb20ifQ.OGrEymIqN3f9EAcdVJJfi_KSZQfDDnGGY7ywSXVLutU',
-      }),
     });
     const data = await res.json();
     if (data.code != 200) {
@@ -95,8 +89,6 @@ const Snippets = (props) => {
       },
       body: JSON.stringify({
         snipid: id,
-        token:
-          'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InJvb2JhbmRjOEBnbWFpbC5jb20ifQ.OGrEymIqN3f9EAcdVJJfi_KSZQfDDnGGY7ywSXVLutU',
       }),
     });
     const tasksFromServer = await fetchTasks();
@@ -113,8 +105,6 @@ const Snippets = (props) => {
       },
       body: JSON.stringify({
         snipid: id,
-        token:
-          'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InJvb2JhbmRjOEBnbWFpbC5jb20ifQ.OGrEymIqN3f9EAcdVJJfi_KSZQfDDnGGY7ywSXVLutU',
       }),
     });
 
@@ -140,8 +130,6 @@ const Snippets = (props) => {
         title: title,
         text: text,
         tag: tag,
-        token:
-          'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InJvb2JhbmRjOEBnbWFpbC5jb20ifQ.OGrEymIqN3f9EAcdVJJfi_KSZQfDDnGGY7ywSXVLutU',
       }),
     });
     const data = await res.json();

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import CreatableSelect from 'react-select/creatable';
 import moment from 'moment';
 import api from '../api';
+import Cookies from 'js-cookie';
 
 const AddTask = ({ onAdd }) => {
   const [text, setText] = useState('');
@@ -51,11 +52,8 @@ const AddTask = ({ onAdd }) => {
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: Cookies.get('token'),
       },
-      body: JSON.stringify({
-        token:
-          'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InJvb2JhbmRjOEBnbWFpbC5jb20ifQ.OGrEymIqN3f9EAcdVJJfi_KSZQfDDnGGY7ywSXVLutU',
-      }),
     });
     const data = await response.json();
     let taglist = [];
