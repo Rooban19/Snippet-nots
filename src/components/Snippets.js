@@ -12,7 +12,7 @@ const Snippets = (props) => {
   const [showAddTask, setShowAddTask] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [tasks, setTasks] = useState([]);
-  const [modalData, setModalData] = useState({ title: '', text: '' });
+  const [modalData, setModalData] = useState({ title: '', text: '', tag: '' });
   Modal.setAppElement('#root');
   useEffect(() => {
     const getTasks = async () => {
@@ -32,6 +32,7 @@ const Snippets = (props) => {
       body: JSON.stringify({
         title: task.text,
         text: task.day,
+        tag: task.tag,
         token:
           'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InJvb2JhbmRjOEBnbWFpbC5jb20ifQ.OGrEymIqN3f9EAcdVJJfi_KSZQfDDnGGY7ywSXVLutU',
       }),
@@ -117,7 +118,7 @@ const Snippets = (props) => {
     setModalOpen(true);
   };
 
-  const updateTask = async (id, title, text) => {
+  const updateTask = async (id, title, text, tag) => {
     console.log(text, title);
     const res = await fetch(`${api}updatesnip/`, {
       method: 'PATCH',
@@ -129,6 +130,7 @@ const Snippets = (props) => {
         id: id,
         title: title,
         text: text,
+        tag: tag,
         token:
           'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InJvb2JhbmRjOEBnbWFpbC5jb20ifQ.OGrEymIqN3f9EAcdVJJfi_KSZQfDDnGGY7ywSXVLutU',
       }),
@@ -158,6 +160,7 @@ const Snippets = (props) => {
           id={modalData.id}
           title={modalData.title}
           desc={modalData.text}
+          tagg={modalData.tag.title}
         />
       </Modal>
       {showAddTask && <AddTask onAdd={addTask} />}

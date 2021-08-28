@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import moment from 'moment';
 import api from '../api';
+import CreatableSelect from 'react-select/creatable';
 
-const ModalUpdate = ({ onUpdateTask, title, desc, id }) => {
+const ModalUpdate = ({ onUpdateTask, title, desc, id, tagg }) => {
   const [text, setText] = useState(title);
   const [day, setDay] = useState(desc);
   const [reminder, setReminder] = useState(false);
-  console.log(id, text, day);
+  const [tag, setTag] = useState(tagg);
+  const [options, setOptions] = useState([]);
+  console.log(tagg);
   const onSubmit = async (e) => {
     e.preventDefault();
 
@@ -16,11 +19,54 @@ const ModalUpdate = ({ onUpdateTask, title, desc, id }) => {
     }
     console.log(id, text, day);
 
-    onUpdateTask(id, text, day);
+    onUpdateTask(id, text, day, tag);
 
     // setText('');
     // setDay('');
   };
+
+  const getList = async () => {
+    const response = await fetch(`${api}gettags/`, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        token:
+          'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InJvb2JhbmRjOEBnbWFpbC5jb20ifQ.OGrEymIqN3f9EAcdVJJfi_KSZQfDDnGGY7ywSXVLutU',
+      }),
+    });
+    const data = await response.json();
+    let taglist = [];
+    const resut = data.result;
+    for (const key in resut) {
+      taglist.push({ value: resut[key].value, label: resut[key].value });
+    }
+    console.log(taglist);
+    setOptions(taglist);
+    console.log(data);
+  };
+  const handleChange = (newValue, actionMeta) => {
+    console.group('Value Changed');
+    console.log(actionMeta.action);
+    if (actionMeta.action === 'select-option') {
+      setTag(newValue.label);
+    }
+    console.log(`action: ${actionMeta.action}`);
+    console.groupEnd();
+  };
+  const handleInputChange = (inputValue, actionMeta) => {
+    console.group('Input Changed');
+    console.log(inputValue);
+    if (inputValue !== '') {
+      setTag(inputValue);
+    }
+
+    console.log(`action: ${actionMeta.action}`);
+    console.groupEnd();
+  };
+  console.log('TAG IN MODAL ', tag);
 
   return (
     <form className='add-form' onSubmit={onSubmit}>
@@ -42,6 +88,16 @@ const ModalUpdate = ({ onUpdateTask, title, desc, id }) => {
           onChange={(e) => setDay(e.target.value)}
         />
       </div>
+
+      <label>Tag</label>
+      <CreatableSelect
+        isClearable
+        defaultInputValue={tag}
+        onChange={handleChange}
+        onFocus={getList}
+        onInputChange={handleInputChange}
+        options={options}
+      />
 
       <input type='submit' value='Save' className='btn btn-block' />
     </form>
