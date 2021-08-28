@@ -1,15 +1,24 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import Cookies from 'universal-cookie';
+
 import api from '../api';
 
 const Login = () => {
   const history = useHistory();
   const [email, setEmail] = useState('');
   const [OTP, setOTP] = useState();
+
+  const cookies = new Cookies();
   const [sentOTP, setSentOTP] = useState(false);
   console.log(api);
   console.log(OTP);
 
+  function saveToken(token) {
+    cookies.set('token', token, { path: '/' });
+    console.log(cookies.getAll);
+    history.push('/snippets');
+  }
   const login = async () => {
     console.log('Logging in ....');
 
@@ -27,7 +36,7 @@ const Login = () => {
     if (response.status === 200) {
       setSentOTP(true);
       if (sentOTP) {
-        history.push('/snippets');
+        saveToken(response.token);
       }
     }
   };

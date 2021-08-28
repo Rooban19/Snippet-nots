@@ -7,12 +7,15 @@ import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import ModalUpdate from './ModalUpdate';
 import api from '../api';
+import Cookies from 'universal-cookie';
 
 const Snippets = (props) => {
   const [showAddTask, setShowAddTask] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [tasks, setTasks] = useState([]);
   const [modalData, setModalData] = useState({ title: '', text: '', tag: '' });
+  const cookies = new Cookies();
+  console.log(cookies.get('token'), 'Cookies');
   Modal.setAppElement('#root');
   useEffect(() => {
     const getTasks = async () => {
